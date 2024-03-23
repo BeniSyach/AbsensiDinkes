@@ -138,8 +138,16 @@ const Absence = ({navigation, route}) => {
                   'Anda berada di luar jangkauan, akurasi GPS: ' +
                     gps.data.accuracy +
                     ', tolong kalibrasi GPS atau pakai Internet yang lebih kuat.',
+                  [
+                    {
+                      text: 'OK',
+                      onPress: () => {
+                        navigation.replace('Main');
+                      },
+                    },
+                  ],
+                  {cancelable: false},
                 );
-                navigation.replace('Main');
               } else {
                 console.log('position', gps.data);
                 //get distance
@@ -154,10 +162,19 @@ const Absence = ({navigation, route}) => {
                   setJarak('1');
                   setJ1(j);
                   console.log('akurasi titik lokasi', j);
-                  // if (gps.data.accuracy > 40) {
-                  Alert.alert('Peringatan', 'Anda berada di luar jangkauan');
-                  navigation.replace('Main');
-                  // }
+                  Alert.alert(
+                    'Peringatan',
+                    'Anda berada di luar jangkauan',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => {
+                          navigation.replace('Main');
+                        },
+                      },
+                    ],
+                    {cancelable: false},
+                  );
                 } else {
                   setJarak('2');
                 }
@@ -187,8 +204,16 @@ const Absence = ({navigation, route}) => {
           Alert.alert(
             'Location Permission',
             'Location Permission tidak diizinkan.',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  navigation.replace('Main');
+                },
+              },
+            ],
+            {cancelable: false},
           );
-          navigation.replace('Main');
         }
       })
       .catch(e => {
@@ -237,8 +262,19 @@ const Absence = ({navigation, route}) => {
                   setJarak('1');
                   setJ1(j);
                   // if (gps.data.accuracy > 40) {
-                  Alert.alert('Peringatan', 'Anda berada di luar jangkauan');
-                  navigation.replace('Main');
+                  Alert.alert(
+                    'Peringatan',
+                    'Anda berada di luar jangkauan',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => {
+                          navigation.replace('Main');
+                        },
+                      },
+                    ],
+                    {cancelable: false},
+                  );
                   // }
                 } else {
                   setJarak('2');
@@ -266,6 +302,15 @@ const Absence = ({navigation, route}) => {
           Alert.alert(
             'Location Permission',
             'Location Permission tidak diizinkan.',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  navigation.replace('Main');
+                },
+              },
+            ],
+            {cancelable: false},
           );
         }
         setLoading(false);
@@ -434,9 +479,11 @@ const Absence = ({navigation, route}) => {
             'Aktifkan Fingerprint anda, masuk ke setting/sandi&keamanan pilih sidik jari',
           );
         } else {
-          // Alert.alert('Aktifkan Fingerprint anda, masuk ke setting/sandi&keamanan pilih sidik jari')
+          Alert.alert(
+            'Aktifkan Fingerprint anda, masuk ke setting/sandi&keamanan pilih sidik jari',
+          );
           // test
-          Alert.alert('Err Fingerprint: ', error.name);
+          // Alert.alert('Err Fingerprint: ', error.name);
         }
         FingerprintScanner.release();
       });
@@ -474,8 +521,19 @@ const Absence = ({navigation, route}) => {
 
                 setTest(j);
                 if (j > parseInt(route.params.radius)) {
-                  Alert.alert('Peringatan', 'Anda berada di luar jangkauan');
-                  navigation.replace('Main');
+                  Alert.alert(
+                    'Peringatan',
+                    'Anda berada di luar jangkauan',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => {
+                          navigation.replace('Main');
+                        },
+                      },
+                    ],
+                    {cancelable: false},
+                  );
                 } else {
                   setJarak('2');
                   console.log(form.lat, form.lng);
@@ -483,15 +541,38 @@ const Absence = ({navigation, route}) => {
                   console.log('radius dari gps', j);
 
                   if (route.params.selfie == 'OFF') {
-                    Alert.alert('Hidupkan Camera');
+                    Alert.alert(
+                      'Peringatan',
+                      'Hidupkan Camera',
+                      [
+                        {
+                          text: 'OK',
+                          onPress: () => {
+                            navigation.replace('Main');
+                          },
+                        },
+                      ],
+                      {cancelable: false},
+                    );
                     setLoading(false);
                   } else if (form.lat != '' && form.lng != '') {
                     sendData(gps.data);
                   } else {
                     console.log('data : ', form);
-                    Alert.alert('Lengkapi data terlebih dahulu');
+                    Alert.alert(
+                      'Peringatan',
+                      'Lengkapi data terlebih dahulu',
+                      [
+                        {
+                          text: 'OK',
+                          onPress: () => {
+                            navigation.replace('Main');
+                          },
+                        },
+                      ],
+                      {cancelable: false},
+                    );
                     setLoading(false);
-                    navigation.replace('Main');
                   }
                 }
 
@@ -517,8 +598,16 @@ const Absence = ({navigation, route}) => {
           Alert.alert(
             'Location Permission',
             'Location Permission tidak diizinkan.',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  navigation.replace('Main');
+                },
+              },
+            ],
+            {cancelable: false},
           );
-          navigation.replace('Main');
         }
         // setLoading(false);
       })

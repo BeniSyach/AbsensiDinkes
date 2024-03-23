@@ -305,7 +305,7 @@ const User = ({navigation, route}) => {
       const {status, message} = req.data;
       if (status == true) {
         AsyncStorage.clear();
-        navigation.navigate('Login');
+        navigation.replace('Login');
       } else {
         Alert.alert('Gagal Logout');
       }

@@ -23,6 +23,7 @@ import {useIsFocused} from '@react-navigation/native';
 import myFunctions from '../../functions';
 import reactNativeAndroidLocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import JailMonkey from 'jail-monkey';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import Modal from 'react-native-modal';
 
 const Home = ({navigation}) => {
@@ -47,6 +48,7 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     console.log('di home');
+    getData();
     if (Platform.OS === 'android') {
       reactNativeAndroidLocationServicesDialogBox
         .checkLocationServicesIsEnabled({
@@ -61,23 +63,8 @@ const Home = ({navigation}) => {
         })
         .catch(error => {
           console.log(error.message);
-          // alert('gps harus aktif');
-          // setLoading(false);
         });
     }
-    Promise.all([
-      myFunctions.checkFingerprint(),
-      myFunctions.permissionCamera(),
-      myFunctions.permissionLocation(),
-    ])
-      .then(res => {
-        console.log('promise all', res);
-        getData();
-      })
-      .catch(e => {
-        console.log('err promise all', e);
-        // setLoading(false);
-      });
   }, []);
 
   const onRefresh = React.useCallback(() => {
@@ -103,8 +90,24 @@ const Home = ({navigation}) => {
     API.menu(USER.userId, REFRESHTOKEN).then(result => {
       if (result) {
         console.log('data2', result);
-        setData(result);
-        // dispatch(SET_DATA_PERMISSION(result.UsersById));
+        if (result.status == 'error') {
+          Alert.alert(
+            'Sesi Berakhir',
+            'Silahkan Login Ulang Kembali',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  AsyncStorage.clear();
+                  navigation.replace('Login');
+                },
+              },
+            ],
+            {cancelable: false},
+          );
+        } else {
+          setData(result);
+        }
         if (result.versionNow == 'not') {
           Alert.alert(result.version);
         }
@@ -125,10 +128,6 @@ const Home = ({navigation}) => {
       'Device Anda di root tolong kembalikan seperti semula',
       [{text: 'OK', onPress: () => console.log('OK Pressed')}],
     );
-  } else if (JailMonkey.canMockLocation()) {
-    Alert.alert('Error', 'Device Anda Memakai Lokasi Palsu', [
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-    ]);
   } else {
     return (
       <>
